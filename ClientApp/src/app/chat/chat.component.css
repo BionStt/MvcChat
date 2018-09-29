@@ -1,0 +1,10 @@
+.body-content {
+  padding-top: 50px;
+  width: 480px;
+}
+
+.listMessages {
+    display: block;
+    height:300px;
+    overflow-y: scroll;
+  }

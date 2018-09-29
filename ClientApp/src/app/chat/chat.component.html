@@ -1,0 +1,38 @@
+<div class="container body-content">
+  <h1>MvcChat</h1>
+
+  <div class="alert alert-danger" role="alert" [hidden]="!errorMessage">
+    {{errorMessage}}
+  </div>
+
+  <label for="joinName">Your name:</label>
+  <div class="input-group mb-3">
+    <input class="form-control" [(ngModel)]="joinName" placeholder="your name" [disabled]="id" id="joinName" />
+    <div class="input-group-append">
+      <button *ngIf="id; else elseBlock" class="btn btn-outline-secondary" (click)="leave()" type="button">Leave</button>
+      <ng-template #elseBlock>
+        <button class="btn btn-outline-secondary" (click)="join()" [disabled]="!joinName">Join</button>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="h5">Received messages:</div>
+  <div class="border mb-3 listMessages">
+    <div *ngFor="let msg of messages" class="mb-2"><span class="text-secondary">{{msg[0]}} to {{msg[1]}}:</span><br /><span class="pl-2">{{msg[2]}}</span></div>
+  </div>
+
+  <label for="sendMessage">Send message:</label>
+  <textarea class="form-control" rows="3" [(ngModel)]="messageText" placeholder="message text" style="resize:none" id="sendMessage"></textarea>
+
+  <label for="recipientName">To:</label>
+  <div class="input-group">
+    <select class="form-control" id="recipientName" [(ngModel)]="selectedUser">
+      <option value="">All</option>
+      <option *ngFor="let user of users" [value]="user.key">{{user.value.name}} ({{user.key}})</option>
+    </select>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" (click)="sendMessage()" [disabled]="!id||!messageText||selectedUser===undefined">Send
+        Message</button>
+    </div>
+  </div>
+</div>
