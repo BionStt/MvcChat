@@ -1,15 +1,17 @@
-using System.Collections.Generic;
 using MvcChat.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace MvcChat.Infrastructure
 {
     public class MemoryMessageRepository : IMessageRepository
     {
         private Dictionary<string, List<Message>> items = new Dictionary<string, List<Message>>();
+
+        // IMessageRepository implementation
 
         public Task<IEnumerable<Message>> GetMessagesFor(string id, int timeout)
         {
@@ -25,7 +27,7 @@ namespace MvcChat.Infrastructure
 
             if (null == messages || messages.Count < 1) return Task.Run(() => WaitMessagesFor(id, timeout).AsEnumerable());
 
-            //clear messages
+            // clear messages
             Init(id);
 
             return Task<IEnumerable<Message>>.FromResult(messages.AsEnumerable());
@@ -77,6 +79,12 @@ namespace MvcChat.Infrastructure
             }
         }
 
+        /// <summary>
+        /// Adds a message to the list of messages for user with specified id
+        /// </summary>
+        /// <param name="id">User identifier</param>
+        /// <param name="msg">Incoming message</param>
+        /// <returns>True if the message was added successfully</returns>
         private bool Add(string id, Message msg)
         {
             List<Message> listMsgId;
@@ -87,16 +95,20 @@ namespace MvcChat.Infrastructure
                 {
                     listMsgId.Add(msg);
                     Monitor.Pulse(listMsgId);
-                }       
+                }
 
                 return true;
             }
             catch (KeyNotFoundException)
             {
                 return false;
-            }             
+            }
         }
 
+        /// <summary>
+        /// Adds a message to the lists of messages for all users
+        /// </summary>
+        /// <param name="msg">Incoming message</param>
         private void AddToAll(Message msg)
         {
             foreach(KeyValuePair<string, List<Message>> l in items)
@@ -106,7 +118,7 @@ namespace MvcChat.Infrastructure
                 {
                     if(msg.type==MessageType.UsersList)
                     {
-                        //Old messages with list of users are not necessary anymore 
+                        //Previous messages with list of users are already outdated
                         l.Value.RemoveAll(m=>m.type==MessageType.UsersList);
                     }
 
@@ -116,6 +128,14 @@ namespace MvcChat.Infrastructure
             }
         }
 
+        /// <summary>
+        /// Wait until neww message is added to the list of message for user with specified id
+        /// </summary>
+        /// <param name="id">User identifier</param>
+        /// <param name="timeout">Timeout in milliseconds for waiting
+        /// if there are not messages at the monent of calling
+        /// the function</param>
+        /// <returns></returns>
         private List<Message> WaitMessagesFor(string id, int timeout)
         {
             try
@@ -128,10 +148,10 @@ namespace MvcChat.Infrastructure
                     if (listOfMessages.Count < 1)
                         Monitor.Wait(syncObj, timeout);
 
-                    //assign new empty List of messages to client
+                    // assign new empty List of messages to client
                     Init(id);
 
-                    //these messages may be lost in case if connection is already broken
+                    // these messages may be lost in case if connection is already broken
                     return listOfMessages;
                 }
             }

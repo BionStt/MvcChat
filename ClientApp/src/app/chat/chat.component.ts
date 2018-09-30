@@ -3,6 +3,9 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 
 import { DOCUMENT } from '@angular/common';
 
+/**
+ * Mvc chat frontend
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './chat.component.html',
@@ -32,6 +35,12 @@ export class ChatComponent {
     }
   }
 
+  /**
+   * Returns user name by identifier
+   * @param id - user id
+   * @param to - if true then return sender's user name else recipient's
+   * @returns {string} - user name
+   */
   public getUserName(id: string, to: boolean): string {
     if (id) {
       if (this.users) {
@@ -48,6 +57,10 @@ export class ChatComponent {
     return to ? 'All' : 'Server';
   }
 
+  /**
+   * Handles HttpClient errors
+   * @param error - specific error
+   */
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -59,6 +72,9 @@ export class ChatComponent {
     }
   }
 
+  /**
+   * Joins to chat
+   */
   public join() {
     delete this.errorMessage;
     this.users = [];
@@ -79,6 +95,9 @@ export class ChatComponent {
     }, error => this.handleError(error));
   }
 
+  /**
+   * Disconnects user from the chat
+   */
   public leave() {
       delete this.errorMessage;
 
@@ -94,6 +113,9 @@ export class ChatComponent {
     }, error => this.handleError(error));
   }
 
+  /**
+   * Sends a message to the chat
+   */
   public sendMessage() {
     delete this.errorMessage;
 
@@ -110,6 +132,9 @@ export class ChatComponent {
     }, error => this.handleError(error));
   }
 
+  /**
+   * Listens for incoming messages
+   */
   private listen() {
     if (!this.id) {
       this.errorMessage = 'You has left the chat.';
@@ -136,7 +161,8 @@ export class ChatComponent {
         }
 
         setTimeout( () => {
-            const receivedMessages = this.document.querySelector('#receivedMessages');
+            // const receivedMessages = this.document.querySelector('#receivedMessages');
+            const receivedMessages = this.document.getElementById('receivedMessages');
             receivedMessages.scrollTop = receivedMessages.scrollHeight;
           }, 0);
 

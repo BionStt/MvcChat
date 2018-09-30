@@ -1,6 +1,6 @@
+using MvcChat.Model;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using MvcChat.Model;
 
 namespace MvcChat.Infrastructure
 {
@@ -13,10 +13,11 @@ namespace MvcChat.Infrastructure
         }
 
         // IClientRepository implementation
-        
+
         public Client this[string id] => items.ContainsKey(id) ? items[id] : null;
 
         public IEnumerable<KeyValuePair<string,Client>> Clients => items;
+
         public string Add(string name)
         {
             int ClientId = new System.Random().Next();
@@ -24,6 +25,7 @@ namespace MvcChat.Infrastructure
             items[id] = new Client{name=name};
             return id;
         }
+
         public Client Delete(string id)
         {
             Client c;
