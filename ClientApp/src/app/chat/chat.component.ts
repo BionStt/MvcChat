@@ -1,5 +1,5 @@
 import { Component, HostListener, Inject } from '@angular/core';
-import { HttpClient as Http, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { DOCUMENT } from '@angular/common';
 
@@ -17,12 +17,7 @@ export class ChatComponent {
   public selectedUser: string;
   public errorMessage: string;
 
-  private baseUrl: string;
-  private http: Http;
-
-  constructor(http: Http, @Inject('BASE_URL') baseUrl: string, @Inject(DOCUMENT) private document: any) {
-    this.baseUrl = baseUrl;
-    this.http = http;
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, @Inject(DOCUMENT) private document: any) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -31,7 +26,7 @@ export class ChatComponent {
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.id) {
       this.leave();
     }
@@ -115,7 +110,7 @@ export class ChatComponent {
     }, error => this.handleError(error));
   }
 
-  public listen() {
+  private listen() {
     if (!this.id) {
       this.errorMessage = 'You has left the chat.';
       return;
