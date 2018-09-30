@@ -17,12 +17,12 @@
   </div>
 
   <div class="h5">Received messages:</div>
-  <div class="border mb-3 listMessages">
+  <div class="border mb-3 listMessages" id="receivedMessages">
     <div *ngFor="let msg of messages" class="mb-2"><span class="text-secondary">{{msg[0]}} to {{msg[1]}}:</span><br /><span class="pl-2">{{msg[2]}}</span></div>
   </div>
 
-  <label for="sendMessage">Send message:</label>
-  <textarea class="form-control" rows="3" [(ngModel)]="messageText" placeholder="message text" style="resize:none" id="sendMessage"></textarea>
+  <label for="messageText">Send message:</label>
+  <textarea class="form-control" rows="3" [(ngModel)]="messageText" placeholder="message text" style="resize:none" id="messageText"></textarea>
 
   <label for="recipientName">To:</label>
   <div class="input-group">

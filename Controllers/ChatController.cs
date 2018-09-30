@@ -15,14 +15,14 @@ namespace MvcChat.Controllers
     {
         private const int _msgTimeout = 60000;
 
-        public ChatController(IClientRepository clientRepository, IMessageService msgService)
+        public ChatController(IClientRepository clientRepository, IMessageRepository msgService)
         {
             _clientRepository = clientRepository;
             _msgService = msgService;
         }
 
         private IClientRepository _clientRepository;
-        private IMessageService _msgService;
+        private IMessageRepository _msgService;
 
         [HttpGet("[action]/{id}")]
         public async Task< IActionResult > Listen([Required, RegularExpression(@"\d{1,64}")] string id) {

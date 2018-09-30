@@ -23,7 +23,6 @@ namespace MvcChat
         {
             services.AddSingleton<IClientRepository, MemoryClientRepository>();
             services.AddSingleton<IMessageRepository, MemoryMessageRepository>();
-            services.AddSingleton<IMessageService, MessageService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

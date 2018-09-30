@@ -1,6 +1,8 @@
 import { Component, HostListener, Inject } from '@angular/core';
 import { HttpClient as Http, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
+import { DOCUMENT } from '@angular/common';
+
 @Component({
   selector: 'app-root',
   templateUrl: './chat.component.html',
@@ -8,16 +10,17 @@ import { HttpClient as Http, HttpErrorResponse, HttpHeaders } from '@angular/com
 })
 export class ChatComponent {
   public id: string;
-  public baseUrl: string;
   public messages: Array<[string, string, string]> = [];
   public messageText: string;
   public joinName: string;
-  public http: Http;
   public users: ClientData[];
   public selectedUser: string;
   public errorMessage: string;
 
-  constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
+  private baseUrl: string;
+  private http: Http;
+
+  constructor(http: Http, @Inject('BASE_URL') baseUrl: string, @Inject(DOCUMENT) private document: any) {
     this.baseUrl = baseUrl;
     this.http = http;
   }
@@ -136,6 +139,11 @@ export class ChatComponent {
         if (lastListOfUsers) {
             this.users = lastListOfUsers;
         }
+
+        setTimeout( () => {
+            const receivedMessages = this.document.querySelector('#receivedMessages');
+            receivedMessages.scrollTop = receivedMessages.scrollHeight;
+          }, 0);
 
         // Tail call optimization should to work here
         return this.listen();
