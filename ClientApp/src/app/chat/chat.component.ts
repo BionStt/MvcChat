@@ -1,8 +1,6 @@
 import { Component, HostListener, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { DOCUMENT } from '@angular/common';
-
 /**
  * Mvc chat frontend
  */
@@ -20,7 +18,7 @@ export class ChatComponent {
   public selectedUser: string;
   public errorMessage: string;
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, @Inject(DOCUMENT) private document: any) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -68,7 +66,7 @@ export class ChatComponent {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      this.errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
+      this.errorMessage = `Backend returned code ${error.status}, body was: ${JSON.stringify(error.error)}`;
     }
   }
 
@@ -162,7 +160,7 @@ export class ChatComponent {
 
         setTimeout( () => {
             // const receivedMessages = this.document.querySelector('#receivedMessages');
-            const receivedMessages = this.document.getElementById('receivedMessages');
+            const receivedMessages = document.getElementById('receivedMessages');
             receivedMessages.scrollTop = receivedMessages.scrollHeight;
           }, 0);
 
