@@ -11,7 +11,7 @@ namespace MvcChat.Controllers
     // Main chat controller.
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : Controller
+    public class ChatController : ControllerBase
     {
         private const int _msgTimeout = 60000;// Timeout for delaying a long response to client.
 
